@@ -1,0 +1,36 @@
+# Node
+node_modules/
+dist/
+build/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+bun.lockb
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Turbo monorepo artifacts
+.turbo/
+
+# OS-specific
+.DS_Store
+Thumbs.db
+
+# IDE/Editor
+.vscode/
+
+# Prisma
+apps/server/prisma/*.db
+
+# Miscellaneous
+README.md
+CONTRIBUTING.md
+CHANGELOG.md
+LIBRARIES_CHECKLIST.md

@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "target": "esnext",
+    "module": "esnext",
+    "jsx": "react-jsx",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "skipLibCheck": true,
+    "baseUrl": ".",
+    "paths": {
+      "@ai.mlord.app/web/*": ["apps/web/*"],
+      "@ai.mlord.app/server/*": ["apps/server/*"]
+    }
+  },
+  "exclude": ["node_modules"]
+}
