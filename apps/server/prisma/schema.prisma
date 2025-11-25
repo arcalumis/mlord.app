@@ -12,3 +12,166 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+// User Management
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String?
+  role      UserRole @default(ADMIN)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  maintenanceRequests MaintenanceRequest[]
+  financialRecords    FinancialRecord[]
+  leads               Lead[]
+
+  @@map("users")
+}
+
+enum UserRole {
+  ADMIN
+  MANAGER
+  VIEWER
+}
+
+// Lead Management
+model Lead {
+  id                String       @id @default(cuid())
+  propertyAddress   String
+  propertyType      PropertyType
+  bedrooms          Int?
+  bathrooms         Float?
+  squareFeet        Int?
+  askingPrice       Float?
+  contactName       String
+  contactEmail      String
+  contactPhone      String?
+  notes             String?
+  aiQualification   String?      // AI-generated qualification
+  aiFollowUpAction  String?      // AI-suggested follow-up
+  qualificationScore Int?        // 0-100 score
+  status            LeadStatus   @default(NEW)
+  createdAt         DateTime     @default(now())
+  updatedAt         DateTime     @updatedAt
+  userId            String?
+  user              User?        @relation(fields: [userId], references: [id])
+
+  @@map("leads")
+}
+
+enum PropertyType {
+  SINGLE_FAMILY
+  MULTI_FAMILY
+  CONDO
+  TOWNHOUSE
+  COMMERCIAL
+  LAND
+}
+
+enum LeadStatus {
+  NEW
+  QUALIFIED
+  CONTACTED
+  SHOWING_SCHEDULED
+  OFFER_MADE
+  CLOSED
+  REJECTED
+}
+
+// Maintenance Management
+model MaintenanceRequest {
+  id               String            @id @default(cuid())
+  title            String
+  description      String
+  propertyAddress  String
+  category         MaintenanceCategory?
+  priority         Priority?
+  aiCategory       String?           // AI-suggested category
+  aiPriority       Priority?         // AI-suggested priority
+  status           MaintenanceStatus @default(PENDING)
+  estimatedCost    Float?
+  actualCost       Float?
+  scheduledDate    DateTime?
+  completedDate    DateTime?
+  assignedVendorId String?
+  assignedVendor   Vendor?           @relation(fields: [assignedVendorId], references: [id])
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+  userId           String?
+  user             User?             @relation(fields: [userId], references: [id])
+
+  @@map("maintenance_requests")
+}
+
+enum MaintenanceCategory {
+  PLUMBING
+  ELECTRICAL
+  HVAC
+  APPLIANCES
+  LANDSCAPING
+  PEST_CONTROL
+  PAINTING
+  ROOFING
+  STRUCTURAL
+  OTHER
+}
+
+enum Priority {
+  LOW
+  MEDIUM
+  HIGH
+  URGENT
+}
+
+enum MaintenanceStatus {
+  PENDING
+  SCHEDULED
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+}
+
+// Vendor Management
+model Vendor {
+  id                  String   @id @default(cuid())
+  name                String
+  category            MaintenanceCategory
+  contactName         String?
+  email               String?
+  phone               String
+  address             String?
+  rating              Float?   // 0-5 rating
+  notes               String?
+  isActive            Boolean  @default(true)
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+
+  maintenanceRequests MaintenanceRequest[]
+
+  @@map("vendors")
+}
+
+// Financial Management
+model FinancialRecord {
+  id              String          @id @default(cuid())
+  type            FinancialType
+  category        String
+  amount          Float
+  propertyAddress String
+  description     String?
+  date            DateTime        @default(now())
+  paymentMethod   String?
+  referenceNumber String?
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+  userId          String?
+  user            User?           @relation(fields: [userId], references: [id])
+
+  @@map("financial_records")
+}
+
+enum FinancialType {
+  INCOME
+  EXPENSE
+}
