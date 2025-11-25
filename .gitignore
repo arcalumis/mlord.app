@@ -37,3 +37,4 @@ terraform.tfvars
 # Misc
 *.tgz
 *.md
+scripts
