@@ -1,0 +1,25 @@
+# Copy this file to terraform.tfvars and update with your values
+
+aws_region   = "us-east-1"
+project_name = "mlord"
+environment  = "prod"
+
+# Container Configuration
+container_port   = 3000
+container_cpu    = 512  # 0.5 vCPU 
+container_memory = 1024 # 1 GB
+
+# Scaling Configuration (simplified for cost savings)
+desired_count = 1 # Initial number of tasks
+min_capacity  = 1 # Minimum tasks for auto-scaling
+max_capacity  = 4 # Maximum tasks for auto-scaling
+
+# Database (from Neon)
+database_url = "postgresql://user:password@host:5432/database?sslmode=require"
+
+# SSL/HTTPS Configuration 
+domain_name = ""  
+
+# DNS Configuration (only needed if using Route 53 for domain)
+use_route53      = false # You can set this to true if your domain is in Route 53
+route53_zone_id  = ""    # Your Route 53 hosted zone ID (if use_route53 is true)

@@ -28,3 +28,12 @@ Thumbs.db
 
 # Prisma
 apps/server/prisma/*.db
+
+# Terraform
+terraform/.terraform/
+terraform/.terraform.lock.hcl
+terraform.tfvars
+
+# Misc
+*.tgz
+*.md

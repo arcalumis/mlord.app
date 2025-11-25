@@ -7,7 +7,7 @@ Thank you for your interest in contributing to this project! All contributions t
 1.  **Fork the repository** on GitHub.
 2.  **Clone your fork** to your local machine:
     ```bash
-    git clone https://github.com/YOUR_USERNAME/ai.mlord.app.git
+    git clone https://github.com/arcalumis/ai.mlord.app.git
     cd ai.mlord.app
     ```
 3.  **Install dependencies** using Bun:
@@ -15,11 +15,11 @@ Thank you for your interest in contributing to this project! All contributions t
     bun install
     ```
 4.  **Set up environment variables:**
-    -   Copy the example environment file for the server:
-        ```bash
-        cp apps/server/.env.example apps/server/.env
-        ```
-    -   Fill in the required variables in `apps/server/.env`.
+    - Copy the example environment file for the server:
+      ```bash
+      cp apps/server/.env.example apps/server/.env
+      ```
+    - Fill in the required variables in `apps/server/.env`.
 5.  **Run the development servers:**
     ```bash
     bun run dev
@@ -29,15 +29,15 @@ Thank you for your interest in contributing to this project! All contributions t
 
 This project uses [Biome](https://biomejs.dev/) for linting and formatting. Please ensure your code adheres to the project's style by running the following commands before committing:
 
--   **Check for issues:**
-    ```bash
-    bun run lint
-    ```
--   **Format your code:**
-    ```bash
-    cd apps/web && bun run format && cd ../..
-    cd apps/server && bun run format && cd ../..
-    ```
+- **Check for issues:**
+  ```bash
+  bun run lint
+  ```
+- **Format your code:**
+  ```bash
+  cd apps/web && bun run format && cd ../..
+  cd apps/server && bun run format && cd ../..
+  ```
 
 ## Submitting a Pull Request
 

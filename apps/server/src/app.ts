@@ -2,10 +2,8 @@ import compression from "compression";
 import cors from "cors";
 import dotenv from "dotenv";
 import express from "express";
-import mongoSanitize from "express-mongo-sanitize";
 import helmet from "helmet";
 import pinoHttp from "pino-http";
-import xss from "xss-clean";
 import { corsOptions } from "./config/cors.js";
 import logger from "./config/logger.js";
 import { errorHandler, notFoundHandler } from "./middleware/errorHandler.js";
@@ -28,14 +26,6 @@ app.use(cors(corsOptions));
 // Prevents DoS attacks via large payloads
 app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ extended: true, limit: "10mb" }));
-
-// Data sanitization against XSS
-// Cleans user input from malicious HTML/JS code
-app.use(xss());
-
-// Data sanitization against NoSQL injection
-// Removes prohibited characters from user input
-app.use(mongoSanitize());
 
 // Compression middleware
 app.use(compression());
