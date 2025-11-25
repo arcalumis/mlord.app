@@ -11,4 +11,29 @@ export default defineConfig({
 			"@": path.resolve(__dirname, "./src"),
 		},
 	},
+	// Dev server configuration
+	server: {
+		port: 5173,
+		// Proxy API requests to backend during local development
+		proxy: {
+			"/api": {
+				target: "http://localhost:3000",
+				changeOrigin: true,
+			},
+		},
+	},
+	// Build optimizations
+	build: {
+		// Disable source maps in production for smaller bundle size
+		sourcemap: false,
+		// Manual chunks for better caching
+		rollupOptions: {
+			output: {
+				manualChunks: {
+					// Separate React vendor bundle for better caching
+					react: ["react", "react-dom"],
+				},
+			},
+		},
+	},
 });

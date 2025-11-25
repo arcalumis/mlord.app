@@ -44,9 +44,17 @@ resource "aws_security_group" "ecs_tasks" {
   vpc_id      = aws_vpc.main.id
 
   ingress {
-    description     = "Allow traffic from ALB"
+    description     = "Allow traffic from ALB to backend"
     from_port       = var.container_port
     to_port         = var.container_port
+    protocol        = "tcp"
+    security_groups = [aws_security_group.alb.id]
+  }
+
+  ingress {
+    description     = "Allow traffic from ALB to frontend"
+    from_port       = var.frontend_container_port
+    to_port         = var.frontend_container_port
     protocol        = "tcp"
     security_groups = [aws_security_group.alb.id]
   }

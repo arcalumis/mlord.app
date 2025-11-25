@@ -58,3 +58,19 @@ output "public_subnet_ids" {
   description = "IDs of the public subnets"
   value       = aws_subnet.public[*].id
 }
+
+# Frontend outputs
+output "frontend_ecr_repository_url" {
+  description = "URL of the frontend ECR repository"
+  value       = aws_ecr_repository.frontend.repository_url
+}
+
+output "frontend_service_name" {
+  description = "Name of the frontend ECS service"
+  value       = aws_ecs_service.frontend.name
+}
+
+output "frontend_target_group_arn" {
+  description = "ARN of the frontend target group"
+  value       = aws_lb_target_group.frontend.arn
+}

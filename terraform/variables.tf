@@ -75,3 +75,40 @@ variable "route53_zone_id" {
   type        = string
   default     = ""
 }
+
+# Frontend-specific variables
+variable "frontend_container_port" {
+  description = "Frontend container port (Nginx)"
+  type        = number
+  default     = 80
+}
+
+variable "frontend_container_cpu" {
+  description = "Frontend container CPU units (256 = 0.25 vCPU)"
+  type        = number
+  default     = 256
+}
+
+variable "frontend_container_memory" {
+  description = "Frontend container memory in MB"
+  type        = number
+  default     = 512
+}
+
+variable "frontend_desired_count" {
+  description = "Desired number of frontend tasks"
+  type        = number
+  default     = 2
+}
+
+variable "frontend_min_capacity" {
+  description = "Minimum number of frontend tasks for auto-scaling"
+  type        = number
+  default     = 2
+}
+
+variable "frontend_max_capacity" {
+  description = "Maximum number of frontend tasks for auto-scaling"
+  type        = number
+  default     = 6
+}
