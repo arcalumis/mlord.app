@@ -1,5 +1,7 @@
 import type { NextFunction, Request, Response } from "express";
 import { ZodError } from "zod";
+import logger from "../config/logger.js";
+import { isCsrfError } from "./csrf.js";
 
 export class AppError extends Error {
 	constructor(
@@ -18,12 +20,20 @@ export const errorHandler = (
 	res: Response,
 	next: NextFunction,
 ) => {
+	// CSRF token errors
+	if (isCsrfError(err)) {
+		return res.status(403).json({
+			status: "error",
+			message: "Invalid CSRF token",
+		});
+	}
+
 	// Zod validation errors
 	if (err instanceof ZodError) {
 		return res.status(400).json({
 			status: "error",
 			message: "Validation error",
-			errors: err.errors,
+			errors: err.issues,
 		});
 	}
 
@@ -44,7 +54,7 @@ export const errorHandler = (
 	}
 
 	// Default error
-	console.error("❌ Error:", err);
+	logger.error({ err, stack: err.stack }, "Unhandled error");
 	return res.status(500).json({
 		status: "error",
 		message:
