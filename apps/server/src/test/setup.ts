@@ -1,3 +1,5 @@
+import { afterEach } from "vitest";
+
 /**
  * Test setup file
  * Runs before all tests to configure the test environment
