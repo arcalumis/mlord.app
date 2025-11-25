@@ -1,0 +1,54 @@
+# syntax=docker/dockerfile:1
+
+# Base stage with Bun runtime
+FROM oven/bun:1.3.3-alpine AS base
+WORKDIR /app
+
+# Install production dependencies
+FROM base AS deps
+COPY package.json bun.lock* ./
+RUN bun install --frozen-lockfile --production
+
+# Install all dependencies (including dev)
+FROM base AS deps-all
+COPY package.json bun.lock* ./
+RUN bun install --frozen-lockfile
+
+# Build stage
+FROM deps-all AS build
+COPY . .
+# Generate Prisma Client
+RUN bunx prisma generate
+# Type check
+RUN bun run typecheck
+# Build the application
+RUN bun run build
+
+# Production stage
+FROM base AS production
+ENV NODE_ENV=production
+
+# Copy production dependencies
+COPY --from=deps /app/node_modules ./node_modules
+# Copy built application
+COPY --from=build /app/dist ./dist
+# Copy Prisma schema and generated client
+COPY --from=build /app/prisma ./prisma
+COPY --from=build /app/node_modules/.prisma ./node_modules/.prisma
+# Copy necessary files
+COPY package.json ./
+
+# Create non-root user
+RUN addgroup -g 1001 -S nodejs && \
+    adduser -S bun -u 1001
+USER bun
+
+# Expose port
+EXPOSE 3000
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
+  CMD bun run -e 'fetch("http://localhost:3000/api/v1/health").then(r => r.ok ? process.exit(0) : process.exit(1))'
+
+# Start the application
+CMD ["bun", "run", "dist/index.js"]
