@@ -28,9 +28,3 @@ Thumbs.db
 
 # Prisma
 apps/server/prisma/*.db
-
-# Miscellaneous
-README.md
-CONTRIBUTING.md
-CHANGELOG.md
-LIBRARIES_CHECKLIST.md
