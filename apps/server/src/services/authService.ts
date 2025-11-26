@@ -11,7 +11,7 @@ interface AuthResponse {
 	user: {
 		id: string;
 		email: string;
-		name: string;
+		name: string | null;
 		role: string;
 	};
 	token: string;

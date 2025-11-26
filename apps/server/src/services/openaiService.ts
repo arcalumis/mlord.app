@@ -1,9 +1,17 @@
 import type { MaintenanceCategory, Priority } from "@prisma/client";
 import OpenAI from "openai";
 
-const openai = new OpenAI({
-	apiKey: process.env.OPENAI_API_KEY,
-});
+// Lazy initialization to avoid errors during test imports
+let openai: OpenAI | null = null;
+
+function getOpenAIClient(): OpenAI {
+	if (!openai) {
+		openai = new OpenAI({
+			apiKey: process.env.OPENAI_API_KEY,
+		});
+	}
+	return openai;
+}
 
 export interface VendorInfo {
 	id: string;
@@ -98,7 +106,7 @@ Respond with a JSON object only, no additional text:
 }`;
 
 	try {
-		const response = await openai.chat.completions.create({
+		const response = await getOpenAIClient().chat.completions.create({
 			model: "gpt-4o-mini",
 			messages: [
 				{

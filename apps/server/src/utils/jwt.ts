@@ -1,15 +1,16 @@
 import type { User } from "@prisma/client";
 import jwt from "jsonwebtoken";
+import type { StringValue } from "ms";
 
 interface JWTPayload {
 	id: string;
 	email: string;
-	name: string;
+	name: string | null;
 	role: string;
 }
 
 const JWT_SECRET = process.env.JWT_SECRET || "fallback-secret-change-me";
-const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || "7d";
+const JWT_EXPIRES_IN = (process.env.JWT_EXPIRES_IN || "7d") as StringValue;
 
 /**
  * Generates a JWT token for the given user

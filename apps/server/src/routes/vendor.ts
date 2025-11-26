@@ -1,3 +1,4 @@
+import type { MaintenanceCategory } from "@prisma/client";
 import type { Request, Response } from "express";
 import { Router } from "express";
 import { authenticateToken } from "../middleware/auth";
@@ -73,7 +74,7 @@ router.get("/", async (req: Request, res: Response): Promise<void> => {
 
 		const result = await getVendors(
 			{
-				category: category as string | undefined,
+				category: category as MaintenanceCategory | undefined,
 				isActive:
 					isActive === "true" ? true : isActive === "false" ? false : undefined,
 				search: search as string | undefined,
@@ -102,7 +103,11 @@ router.get("/", async (req: Request, res: Response): Promise<void> => {
  */
 router.get("/:id", async (req: Request, res: Response): Promise<void> => {
 	try {
-		const { id } = req.params;
+		const id = req.params.id;
+		if (!id) {
+			res.status(400).json({ error: "Bad Request", message: "ID is required" });
+			return;
+		}
 
 		const vendor = await getVendorById(id);
 
@@ -133,7 +138,11 @@ router.get("/:id", async (req: Request, res: Response): Promise<void> => {
  */
 router.put("/:id", async (req: Request, res: Response): Promise<void> => {
 	try {
-		const { id } = req.params;
+		const id = req.params.id;
+		if (!id) {
+			res.status(400).json({ error: "Bad Request", message: "ID is required" });
+			return;
+		}
 		const updateData = req.body;
 
 		const vendor = await updateVendor(id, updateData);
@@ -157,7 +166,11 @@ router.put("/:id", async (req: Request, res: Response): Promise<void> => {
  */
 router.delete("/:id", async (req: Request, res: Response): Promise<void> => {
 	try {
-		const { id } = req.params;
+		const id = req.params.id;
+		if (!id) {
+			res.status(400).json({ error: "Bad Request", message: "ID is required" });
+			return;
+		}
 
 		await deleteVendor(id);
 

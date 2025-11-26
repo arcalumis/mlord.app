@@ -1,3 +1,8 @@
+import type {
+	MaintenanceCategory,
+	MaintenanceStatus,
+	Priority,
+} from "@prisma/client";
 import type { Request, Response } from "express";
 import { Router } from "express";
 import { authenticateToken } from "../middleware/auth";
@@ -65,9 +70,9 @@ router.get("/requests", async (req: Request, res: Response): Promise<void> => {
 
 		const result = await getMaintenanceRequests(
 			{
-				status: status as string | undefined,
-				category: category as string | undefined,
-				priority: priority as string | undefined,
+				status: status as MaintenanceStatus | undefined,
+				category: category as MaintenanceCategory | undefined,
+				priority: priority as Priority | undefined,
 				assignedVendorId: vendorId as string | undefined,
 			},
 			page ? Number.parseInt(page as string, 10) : 1,
@@ -96,7 +101,11 @@ router.get(
 	"/requests/:id",
 	async (req: Request, res: Response): Promise<void> => {
 		try {
-			const { id } = req.params;
+			const id = req.params.id;
+			if (!id) {
+				res.status(400).json({ error: "Bad Request", message: "ID is required" });
+				return;
+			}
 
 			const request = await getMaintenanceRequestById(id);
 
@@ -130,7 +139,11 @@ router.put(
 	"/requests/:id",
 	async (req: Request, res: Response): Promise<void> => {
 		try {
-			const { id } = req.params;
+			const id = req.params.id;
+			if (!id) {
+				res.status(400).json({ error: "Bad Request", message: "ID is required" });
+				return;
+			}
 			const updateData = req.body;
 
 			const request = await updateMaintenanceRequest(id, updateData);
@@ -157,7 +170,11 @@ router.delete(
 	"/requests/:id",
 	async (req: Request, res: Response): Promise<void> => {
 		try {
-			const { id } = req.params;
+			const id = req.params.id;
+			if (!id) {
+				res.status(400).json({ error: "Bad Request", message: "ID is required" });
+				return;
+			}
 
 			await deleteMaintenanceRequest(id);
 
