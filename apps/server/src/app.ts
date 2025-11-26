@@ -1,4 +1,5 @@
 import compression from "compression";
+import cookieParser from "cookie-parser";
 import cors from "cors";
 import dotenv from "dotenv";
 import express from "express";
@@ -8,6 +9,7 @@ import { corsOptions } from "./config/cors.js";
 import logger from "./config/logger.js";
 import { errorHandler, notFoundHandler } from "./middleware/errorHandler.js";
 import { apiLimiter } from "./middleware/rateLimiter.js";
+import authRouter from "./routes/auth.js";
 import healthRouter from "./routes/health.js";
 
 // Load environment variables
@@ -26,6 +28,9 @@ app.use(cors(corsOptions));
 // Prevents DoS attacks via large payloads
 app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ extended: true, limit: "10mb" }));
+
+// Cookie parsing middleware for JWT auth
+app.use(cookieParser());
 
 // Compression middleware
 app.use(compression());
@@ -59,6 +64,7 @@ if (process.env.NODE_ENV !== "test") {
 app.use("/api", apiLimiter);
 
 // Routes
+app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/health", healthRouter);
 
 // 404 handler
