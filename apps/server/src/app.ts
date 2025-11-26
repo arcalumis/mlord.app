@@ -17,6 +17,9 @@ import vendorRouter from "./routes/vendor.js";
 // Load environment variables
 dotenv.config();
 
+// App version for health checks
+export const APP_VERSION = "1.0.0";
+
 const app = express();
 
 // Security middleware
