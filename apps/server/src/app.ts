@@ -11,6 +11,8 @@ import { errorHandler, notFoundHandler } from "./middleware/errorHandler.js";
 import { apiLimiter } from "./middleware/rateLimiter.js";
 import authRouter from "./routes/auth.js";
 import healthRouter from "./routes/health.js";
+import maintenanceRouter from "./routes/maintenance.js";
+import vendorRouter from "./routes/vendor.js";
 
 // Load environment variables
 dotenv.config();
@@ -66,6 +68,8 @@ app.use("/api", apiLimiter);
 // Routes
 app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/health", healthRouter);
+app.use("/api/v1/maintenance", maintenanceRouter);
+app.use("/api/v1/vendors", vendorRouter);
 
 // 404 handler
 app.use(notFoundHandler);
