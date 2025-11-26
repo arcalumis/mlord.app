@@ -37,17 +37,17 @@ if (process.env.NODE_ENV !== "test") {
 		pinoHttp({
 			logger,
 			// Customize HTTP log serialization
-			customLogLevel: (req, res, err) => {
+			customLogLevel: (_req, res, err) => {
 				if (res.statusCode >= 500 || err) return "error";
 				if (res.statusCode >= 400) return "warn";
 				return "info";
 			},
 			// Customize success message
-			customSuccessMessage: (req, res) => {
+			customSuccessMessage: (req, _res) => {
 				return `${req.method} ${req.url} completed`;
 			},
 			// Customize error message
-			customErrorMessage: (req, res, err) => {
+			customErrorMessage: (req, _res, err) => {
 				return `${req.method} ${req.url} failed: ${err.message}`;
 			},
 		}),

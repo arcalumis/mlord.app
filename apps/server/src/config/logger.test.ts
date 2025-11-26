@@ -15,7 +15,6 @@ describe("Logger Configuration", () => {
 
 	it("should be disabled in test environment", () => {
 		// Logger should be disabled in test env (from config)
-		const loggerConfig = logger as any;
 		expect(process.env.NODE_ENV).toBe("test");
 	});
 });

@@ -1,5 +1,5 @@
-import { type Request } from "express";
 import { doubleCsrf } from "csrf-csrf";
+import type { Request } from "express";
 
 /**
  * CSRF Protection Configuration

@@ -3,7 +3,7 @@ import { getHealth } from "../services/healthService.js";
 
 const router = Router();
 
-router.get("/", async (req, res) => {
+router.get("/", async (_req, res) => {
 	const health = await getHealth();
 	if (health.db === "error") {
 		res.status(503).json({
@@ -22,3 +22,4 @@ router.get("/", async (req, res) => {
 });
 
 export default router;
+// test

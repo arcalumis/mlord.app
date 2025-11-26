@@ -8,6 +8,7 @@
     "lint:fix": "turbo run lint:fix"
   },
   "devDependencies": {
+    "@biomejs/biome": "^2.3.7",
     "turbo": "^1.13.3"
   },
   "workspaces": [

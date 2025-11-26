@@ -23,7 +23,10 @@ jobs:
           bun-version: ${{ env.BUN_VERSION }}
 
       - name: Install dependencies
-        run: bun install --frozen-lockfile
+        run: bun install
+
+      - name: Install platform-specific optional dependencies
+        run: bun add -d @rollup/rollup-linux-x64-gnu @biomejs/cli-linux-x64 lightningcss-linux-x64-gnu @tailwindcss/oxide-linux-x64-gnu @swc/core-linux-x64-gnu
 
       - name: Run linter (server)
         run: cd apps/server && bun run lint
@@ -44,7 +47,10 @@ jobs:
           bun-version: ${{ env.BUN_VERSION }}
 
       - name: Install dependencies
-        run: bun install --frozen-lockfile
+        run: bun install
+
+      - name: Install platform-specific optional dependencies
+        run: bun add -d @rollup/rollup-linux-x64-gnu @biomejs/cli-linux-x64 lightningcss-linux-x64-gnu @tailwindcss/oxide-linux-x64-gnu @swc/core-linux-x64-gnu
 
       - name: Generate Prisma Client
         run: cd apps/server && DATABASE_URL="postgresql://test:test@localhost:5432/test" bunx prisma generate
@@ -83,10 +89,18 @@ jobs:
           bun-version: ${{ env.BUN_VERSION }}
 
       - name: Install dependencies
-        run: bun install --frozen-lockfile
+        run: bun install
+
+      - name: Install platform-specific optional dependencies
+        run: bun add -d @rollup/rollup-linux-x64-gnu @biomejs/cli-linux-x64 lightningcss-linux-x64-gnu @tailwindcss/oxide-linux-x64-gnu @swc/core-linux-x64-gnu
 
       - name: Generate Prisma Client
         run: cd apps/server && DATABASE_URL="postgresql://postgres:postgres@localhost:5432/test" bunx prisma generate
+
+      - name: Push database schema
+        run: cd apps/server && bunx prisma db push --skip-generate
+        env:
+          DATABASE_URL: postgresql://postgres:postgres@localhost:5432/test
 
       - name: Run tests
         run: cd apps/server && bun run test
@@ -120,7 +134,10 @@ jobs:
           bun-version: ${{ env.BUN_VERSION }}
 
       - name: Install dependencies
-        run: bun install --frozen-lockfile
+        run: bun install
+
+      - name: Install platform-specific optional dependencies
+        run: bun add -d @rollup/rollup-linux-x64-gnu @biomejs/cli-linux-x64 lightningcss-linux-x64-gnu @tailwindcss/oxide-linux-x64-gnu @swc/core-linux-x64-gnu
 
       - name: Generate Prisma Client
         run: cd apps/server && DATABASE_URL="postgresql://test:test@localhost:5432/test" bunx prisma generate
@@ -247,7 +264,7 @@ jobs:
           bun-version: ${{ env.BUN_VERSION }}
 
       - name: Install dependencies
-        run: cd apps/server && bun install --frozen-lockfile
+        run: cd apps/server && bun install
 
       - name: Run Prisma migrations
         run: cd apps/server && bunx prisma migrate deploy
