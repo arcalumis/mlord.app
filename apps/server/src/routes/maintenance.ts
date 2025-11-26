@@ -103,7 +103,9 @@ router.get(
 		try {
 			const id = req.params.id;
 			if (!id) {
-				res.status(400).json({ error: "Bad Request", message: "ID is required" });
+				res
+					.status(400)
+					.json({ error: "Bad Request", message: "ID is required" });
 				return;
 			}
 
@@ -141,7 +143,9 @@ router.put(
 		try {
 			const id = req.params.id;
 			if (!id) {
-				res.status(400).json({ error: "Bad Request", message: "ID is required" });
+				res
+					.status(400)
+					.json({ error: "Bad Request", message: "ID is required" });
 				return;
 			}
 			const updateData = req.body;
@@ -172,7 +176,9 @@ router.delete(
 		try {
 			const id = req.params.id;
 			if (!id) {
-				res.status(400).json({ error: "Bad Request", message: "ID is required" });
+				res
+					.status(400)
+					.json({ error: "Bad Request", message: "ID is required" });
 				return;
 			}
 
