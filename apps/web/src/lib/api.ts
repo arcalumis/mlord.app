@@ -3,7 +3,7 @@
  * Reads API URL from environment variables (defaults to /api for same-domain requests)
  */
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || "/api";
+import { apiUrl } from "./api/config";
 
 /**
  * Custom error class for API errors
@@ -23,11 +23,8 @@ export class ApiError extends Error {
 /**
  * Generic fetch wrapper with error handling
  */
-async function fetchApi<T>(
-	endpoint: string,
-	options?: RequestInit,
-): Promise<T> {
-	const url = `${API_BASE_URL}${endpoint}`;
+async function fetchApi<T>(endpoint: string, options?: RequestInit): Promise<T> {
+	const url = apiUrl(endpoint);
 
 	try {
 		const response = await fetch(url, {
@@ -76,15 +73,6 @@ export const api = {
 	},
 
 	// Add more API methods as needed
-	// Example:
-	// users: {
-	//   list: () => fetchApi<User[]>('/v1/users'),
-	//   get: (id: string) => fetchApi<User>(`/v1/users/${id}`),
-	//   create: (data: CreateUserDto) => fetchApi<User>('/v1/users', {
-	//     method: 'POST',
-	//     body: JSON.stringify(data),
-	//   }),
-	// },
 };
 
 export default api;

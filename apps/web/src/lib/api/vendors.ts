@@ -1,7 +1,6 @@
 import { useAuthStore } from "../../stores/authStore";
+import { apiUrl } from "./config";
 import type { ApiResponse, MaintenanceCategory, Vendor } from "./types";
-
-const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
 
 function getAuthHeaders(): HeadersInit {
 	const token = useAuthStore.getState().token;
@@ -48,7 +47,7 @@ export interface VendorFilters {
 export async function createVendor(
 	input: CreateVendorInput,
 ): Promise<ApiResponse<Vendor>> {
-	const response = await fetch(`${API_BASE_URL}/api/v1/vendors`, {
+	const response = await fetch(apiUrl("/v1/vendors"), {
 		method: "POST",
 		headers: getAuthHeaders(),
 		credentials: "include",
@@ -77,7 +76,7 @@ export async function getVendors(
 	if (filters.page) params.set("page", String(filters.page));
 	if (filters.limit) params.set("limit", String(filters.limit));
 
-	const response = await fetch(`${API_BASE_URL}/api/v1/vendors?${params}`, {
+	const response = await fetch(apiUrl(`/v1/vendors?${params}`), {
 		method: "GET",
 		headers: getAuthHeaders(),
 		credentials: "include",
@@ -95,7 +94,7 @@ export async function getVendors(
  * Get a single vendor
  */
 export async function getVendor(id: string): Promise<ApiResponse<Vendor>> {
-	const response = await fetch(`${API_BASE_URL}/api/v1/vendors/${id}`, {
+	const response = await fetch(apiUrl(`/v1/vendors/${id}`), {
 		method: "GET",
 		headers: getAuthHeaders(),
 		credentials: "include",
@@ -116,7 +115,7 @@ export async function updateVendor(
 	id: string,
 	data: UpdateVendorInput,
 ): Promise<ApiResponse<Vendor>> {
-	const response = await fetch(`${API_BASE_URL}/api/v1/vendors/${id}`, {
+	const response = await fetch(apiUrl(`/v1/vendors/${id}`), {
 		method: "PUT",
 		headers: getAuthHeaders(),
 		credentials: "include",
@@ -135,7 +134,7 @@ export async function updateVendor(
  * Delete a vendor
  */
 export async function deleteVendor(id: string): Promise<void> {
-	const response = await fetch(`${API_BASE_URL}/api/v1/vendors/${id}`, {
+	const response = await fetch(apiUrl(`/v1/vendors/${id}`), {
 		method: "DELETE",
 		headers: getAuthHeaders(),
 		credentials: "include",

@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
+import { apiUrl } from "../lib/api/config";
 
 interface User {
 	id: string;
@@ -21,8 +22,6 @@ interface AuthState {
 	setLoading: (loading: boolean) => void;
 	setError: (error: string | null) => void;
 }
-
-const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
 
 export const useAuthStore = create<AuthState>()(
 	persist(
@@ -71,7 +70,7 @@ export async function loginApi(
 	email: string,
 	password: string,
 ): Promise<{ user: User; token: string }> {
-	const response = await fetch(`${API_BASE_URL}/api/v1/auth/login`, {
+	const response = await fetch(apiUrl("/v1/auth/login"), {
 		method: "POST",
 		headers: {
 			"Content-Type": "application/json",
@@ -93,7 +92,7 @@ export async function loginApi(
  * Logout API call
  */
 export async function logoutApi(): Promise<void> {
-	await fetch(`${API_BASE_URL}/api/v1/auth/logout`, {
+	await fetch(apiUrl("/v1/auth/logout"), {
 		method: "POST",
 		credentials: "include",
 	});
@@ -103,7 +102,7 @@ export async function logoutApi(): Promise<void> {
  * Get current user API call
  */
 export async function getCurrentUserApi(token: string): Promise<User> {
-	const response = await fetch(`${API_BASE_URL}/api/v1/auth/me`, {
+	const response = await fetch(apiUrl("/v1/auth/me"), {
 		method: "GET",
 		headers: {
 			Authorization: `Bearer ${token}`,

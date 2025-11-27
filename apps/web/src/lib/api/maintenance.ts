@@ -1,4 +1,5 @@
 import { useAuthStore } from "../../stores/authStore";
+import { apiUrl } from "./config";
 import type {
 	AILogEntry,
 	ApiResponse,
@@ -8,8 +9,6 @@ import type {
 	MaintenanceStatus,
 	Priority,
 } from "./types";
-
-const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
 
 function getAuthHeaders(): HeadersInit {
 	const token = useAuthStore.getState().token;
@@ -42,7 +41,7 @@ export interface MaintenanceRequestFilters {
 export async function createMaintenanceRequest(
 	input: CreateMaintenanceRequestInput,
 ): Promise<CreateMaintenanceRequestResponse> {
-	const response = await fetch(`${API_BASE_URL}/api/v1/maintenance/requests`, {
+	const response = await fetch(apiUrl("/v1/maintenance/requests"), {
 		method: "POST",
 		headers: getAuthHeaders(),
 		credentials: "include",
@@ -71,14 +70,11 @@ export async function getMaintenanceRequests(
 	if (filters.page) params.set("page", String(filters.page));
 	if (filters.limit) params.set("limit", String(filters.limit));
 
-	const response = await fetch(
-		`${API_BASE_URL}/api/v1/maintenance/requests?${params}`,
-		{
-			method: "GET",
-			headers: getAuthHeaders(),
-			credentials: "include",
-		},
-	);
+	const response = await fetch(apiUrl(`/v1/maintenance/requests?${params}`), {
+		method: "GET",
+		headers: getAuthHeaders(),
+		credentials: "include",
+	});
 
 	if (!response.ok) {
 		const error = await response.json();
@@ -94,14 +90,11 @@ export async function getMaintenanceRequests(
 export async function getMaintenanceRequest(
 	id: string,
 ): Promise<ApiResponse<MaintenanceRequest>> {
-	const response = await fetch(
-		`${API_BASE_URL}/api/v1/maintenance/requests/${id}`,
-		{
-			method: "GET",
-			headers: getAuthHeaders(),
-			credentials: "include",
-		},
-	);
+	const response = await fetch(apiUrl(`/v1/maintenance/requests/${id}`), {
+		method: "GET",
+		headers: getAuthHeaders(),
+		credentials: "include",
+	});
 
 	if (!response.ok) {
 		const error = await response.json();
@@ -118,15 +111,12 @@ export async function updateMaintenanceRequest(
 	id: string,
 	data: Partial<MaintenanceRequest>,
 ): Promise<ApiResponse<MaintenanceRequest>> {
-	const response = await fetch(
-		`${API_BASE_URL}/api/v1/maintenance/requests/${id}`,
-		{
-			method: "PUT",
-			headers: getAuthHeaders(),
-			credentials: "include",
-			body: JSON.stringify(data),
-		},
-	);
+	const response = await fetch(apiUrl(`/v1/maintenance/requests/${id}`), {
+		method: "PUT",
+		headers: getAuthHeaders(),
+		credentials: "include",
+		body: JSON.stringify(data),
+	});
 
 	if (!response.ok) {
 		const error = await response.json();
@@ -140,14 +130,11 @@ export async function updateMaintenanceRequest(
  * Delete a maintenance request
  */
 export async function deleteMaintenanceRequest(id: string): Promise<void> {
-	const response = await fetch(
-		`${API_BASE_URL}/api/v1/maintenance/requests/${id}`,
-		{
-			method: "DELETE",
-			headers: getAuthHeaders(),
-			credentials: "include",
-		},
-	);
+	const response = await fetch(apiUrl(`/v1/maintenance/requests/${id}`), {
+		method: "DELETE",
+		headers: getAuthHeaders(),
+		credentials: "include",
+	});
 
 	if (!response.ok) {
 		const error = await response.json();
@@ -159,7 +146,7 @@ export async function deleteMaintenanceRequest(id: string): Promise<void> {
  * Get AI logs
  */
 export async function getAILogs(): Promise<ApiResponse<AILogEntry[]>> {
-	const response = await fetch(`${API_BASE_URL}/api/v1/maintenance/ai-logs`, {
+	const response = await fetch(apiUrl("/v1/maintenance/ai-logs"), {
 		method: "GET",
 		headers: getAuthHeaders(),
 		credentials: "include",
