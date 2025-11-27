@@ -1,3 +1,4 @@
+import { Brain, Sparkles } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Badge } from "../components/ui/badge";
 import {
@@ -54,11 +55,16 @@ export function AILogsPage() {
 
 	return (
 		<div className="container mx-auto px-4 py-8">
-			<div className="mb-6">
-				<h1 className="text-2xl font-bold">AI Assignment Logs</h1>
-				<p className="text-muted-foreground">
-					View the AI's reasoning for each maintenance request classification
-				</p>
+			<div className="mb-6 flex items-center gap-3">
+				<div className="rounded-full bg-primary/10 p-2">
+					<Brain className="h-6 w-6 text-primary" />
+				</div>
+				<div>
+					<h1 className="text-2xl font-bold">Oracle's Wisdom</h1>
+					<p className="text-muted-foreground">
+						Behold the reasoning of the AI oracle for each petition
+					</p>
+				</div>
 			</div>
 
 			{isLoading ? (
@@ -81,24 +87,32 @@ export function AILogsPage() {
 				</Card>
 			) : logs.length === 0 ? (
 				<Card>
-					<CardContent className="p-6 text-center text-muted-foreground">
-						No AI logs yet. Submit a maintenance request to see AI
-						classification in action.
+					<CardContent className="p-12 text-center">
+						<Sparkles className="h-12 w-12 mx-auto text-muted-foreground/50 mb-4" />
+						<p className="text-muted-foreground">
+							The oracle awaits its first petition. Submit a maintenance request
+							to witness its wisdom.
+						</p>
 					</CardContent>
 				</Card>
 			) : (
 				<div className="space-y-4">
 					{logs.map((log, index) => (
-						<Card key={index}>
-							<CardHeader>
+						<Card key={index} className="overflow-hidden">
+							<CardHeader className="bg-muted/30">
 								<div className="flex items-start justify-between">
-									<div>
-										<CardTitle className="text-lg">
-											{log.requestTitle}
-										</CardTitle>
-										<CardDescription>
-											{formatDate(log.timestamp)}
-										</CardDescription>
+									<div className="flex items-start gap-3">
+										<div className="rounded-full bg-primary/10 p-2 mt-0.5">
+											<Sparkles className="h-4 w-4 text-primary" />
+										</div>
+										<div>
+											<CardTitle className="text-lg">
+												{log.requestTitle}
+											</CardTitle>
+											<CardDescription>
+												Divined on {formatDate(log.timestamp)}
+											</CardDescription>
+										</div>
 									</div>
 									<div className="flex gap-2">
 										<Badge variant="outline">
@@ -112,26 +126,28 @@ export function AILogsPage() {
 									</div>
 								</div>
 							</CardHeader>
-							<CardContent className="space-y-4">
+							<CardContent className="space-y-4 pt-4">
 								<div>
-									<h4 className="font-medium text-sm mb-1">
-										Request Description
+									<h4 className="font-medium text-sm mb-1 text-muted-foreground">
+										The Petition
 									</h4>
-									<p className="text-sm text-muted-foreground">
-										{log.requestDescription}
-									</p>
+									<p className="text-sm">{log.requestDescription}</p>
 								</div>
 
 								<Separator />
 
 								<div>
-									<h4 className="font-medium text-sm mb-1">AI Reasoning</h4>
-									<p className="text-sm">{log.classification.reasoning}</p>
+									<h4 className="font-medium text-sm mb-1 text-muted-foreground">
+										The Oracle's Reasoning
+									</h4>
+									<p className="text-sm italic">
+										"{log.classification.reasoning}"
+									</p>
 								</div>
 
 								<div className="flex items-center gap-4 text-sm">
 									<span>
-										<span className="text-muted-foreground">Confidence:</span>{" "}
+										<span className="text-muted-foreground">Certainty:</span>{" "}
 										<span className="font-medium">
 											{Math.round(log.classification.confidence * 100)}%
 										</span>
@@ -139,7 +155,7 @@ export function AILogsPage() {
 									{log.classification.vendorId && (
 										<span>
 											<span className="text-muted-foreground">
-												Assigned Vendor:
+												Craftsman Summoned:
 											</span>{" "}
 											<span className="font-medium">
 												{log.availableVendors.find(
@@ -154,8 +170,8 @@ export function AILogsPage() {
 									<>
 										<Separator />
 										<div>
-											<h4 className="font-medium text-sm mb-2">
-												Available Vendors Considered
+											<h4 className="font-medium text-sm mb-2 text-muted-foreground">
+												Craftsmen Considered
 											</h4>
 											<div className="flex flex-wrap gap-2">
 												{log.availableVendors.map((vendor) => (
@@ -168,7 +184,7 @@ export function AILogsPage() {
 														}
 													>
 														{vendor.name} ({vendor.category.replace(/_/g, " ")}
-														{vendor.rating ? ` - ${vendor.rating}★` : ""})
+														{vendor.rating ? ` — ${vendor.rating}★` : ""})
 													</Badge>
 												))}
 											</div>

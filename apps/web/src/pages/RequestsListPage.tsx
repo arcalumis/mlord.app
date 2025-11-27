@@ -1,4 +1,5 @@
 import { Link } from "@tanstack/react-router";
+import { Filter, Plus, ScrollText } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import { Badge } from "../components/ui/badge";
 import { Button } from "../components/ui/button";
@@ -118,22 +119,33 @@ export function RequestsListPage() {
 	return (
 		<div className="container mx-auto px-4 py-8">
 			<div className="mb-6 flex items-center justify-between">
-				<div>
-					<h1 className="text-2xl font-bold">Maintenance Requests</h1>
-					<p className="text-muted-foreground">
-						View and manage all maintenance requests
-					</p>
+				<div className="flex items-center gap-3">
+					<div className="rounded-full bg-primary/10 p-2">
+						<ScrollText className="h-6 w-6 text-primary" />
+					</div>
+					<div>
+						<h1 className="text-2xl font-bold">Petitions</h1>
+						<p className="text-muted-foreground">
+							Review the maintenance requests from across your realm
+						</p>
+					</div>
 				</div>
 				<Link to="/dashboard/requests/new">
-					<Button>New Request</Button>
+					<Button className="gap-2">
+						<Plus className="h-4 w-4" />
+						New Petition
+					</Button>
 				</Link>
 			</div>
 
-			<Card>
-				<CardHeader>
-					<CardTitle>Filters</CardTitle>
+			<Card className="mb-6">
+				<CardHeader className="pb-3">
+					<div className="flex items-center gap-2">
+						<Filter className="h-4 w-4 text-muted-foreground" />
+						<CardTitle className="text-base">Filters</CardTitle>
+					</div>
 					<CardDescription>
-						Filter requests by status or category
+						Sort through the petitions of your subjects
 					</CardDescription>
 				</CardHeader>
 				<CardContent>
@@ -179,7 +191,7 @@ export function RequestsListPage() {
 				</CardContent>
 			</Card>
 
-			<Card className="mt-6">
+			<Card>
 				<CardContent className="p-0">
 					{isLoading ? (
 						<div className="p-6 space-y-4">
@@ -190,13 +202,16 @@ export function RequestsListPage() {
 					) : error ? (
 						<div className="p-6 text-center text-destructive">{error}</div>
 					) : requests.length === 0 ? (
-						<div className="p-6 text-center text-muted-foreground">
-							No maintenance requests found.{" "}
-							<Link
-								to="/dashboard/requests/new"
-								className="text-primary underline"
-							>
-								Create one
+						<div className="p-12 text-center">
+							<ScrollText className="h-12 w-12 mx-auto text-muted-foreground/50 mb-4" />
+							<p className="text-muted-foreground mb-4">
+								No petitions have been submitted to the realm.
+							</p>
+							<Link to="/dashboard/requests/new">
+								<Button variant="outline" className="gap-2">
+									<Plus className="h-4 w-4" />
+									Submit the First Petition
+								</Button>
 							</Link>
 						</div>
 					) : (
@@ -208,8 +223,8 @@ export function RequestsListPage() {
 									<TableHead>Category</TableHead>
 									<TableHead>Priority</TableHead>
 									<TableHead>Status</TableHead>
-									<TableHead>Vendor</TableHead>
-									<TableHead>Created</TableHead>
+									<TableHead>Craftsman</TableHead>
+									<TableHead>Submitted</TableHead>
 								</TableRow>
 							</TableHeader>
 							<TableBody>
@@ -249,7 +264,7 @@ export function RequestsListPage() {
 			{pagination && pagination.totalPages > 1 && (
 				<div className="mt-4 text-center text-sm text-muted-foreground">
 					Showing page {pagination.page} of {pagination.totalPages} (
-					{pagination.total} total)
+					{pagination.total} total petitions)
 				</div>
 			)}
 		</div>

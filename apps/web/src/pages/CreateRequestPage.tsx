@@ -1,5 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useNavigate } from "@tanstack/react-router";
+import { ArrowLeft, ScrollText, Sparkles } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -94,7 +95,6 @@ export function CreateRequestPage() {
 
 			setAiResult(result.aiClassification);
 
-			// Wait a moment to show the AI result, then redirect
 			setTimeout(() => {
 				navigate({ to: "/dashboard/requests" });
 			}, 3000);
@@ -122,21 +122,40 @@ export function CreateRequestPage() {
 
 	return (
 		<div className="container mx-auto max-w-2xl px-4 py-8">
+			<Button
+				variant="ghost"
+				className="mb-6 gap-2"
+				onClick={() => navigate({ to: "/dashboard" })}
+			>
+				<ArrowLeft className="h-4 w-4" />
+				Back to Throne Room
+			</Button>
+
 			<Card>
 				<CardHeader>
-					<CardTitle>Submit Maintenance Request</CardTitle>
-					<CardDescription>
-						Describe your maintenance issue and our AI will automatically
-						categorize it and assign the best vendor.
-					</CardDescription>
+					<div className="flex items-center gap-3">
+						<div className="rounded-full bg-primary/10 p-2">
+							<ScrollText className="h-5 w-5 text-primary" />
+						</div>
+						<div>
+							<CardTitle>Submit a Petition</CardTitle>
+							<CardDescription>
+								Describe the affliction upon your property. Our oracle shall
+								divine the nature and urgency of the matter.
+							</CardDescription>
+						</div>
+					</div>
 				</CardHeader>
 				<CardContent>
 					{aiResult && (
-						<Alert className="mb-6">
-							<AlertTitle>AI Classification Complete</AlertTitle>
+						<Alert className="mb-6 border-primary/50 bg-primary/5">
+							<Sparkles className="h-4 w-4 text-primary" />
+							<AlertTitle>The Oracle Has Spoken</AlertTitle>
 							<AlertDescription className="mt-2 space-y-2">
 								<div className="flex flex-wrap gap-2">
-									<Badge variant="outline">Category: {aiResult.category}</Badge>
+									<Badge variant="outline">
+										Category: {aiResult.category.replace(/_/g, " ")}
+									</Badge>
 									<Badge variant={getPriorityColor(aiResult.priority)}>
 										Priority: {aiResult.priority}
 									</Badge>
@@ -144,14 +163,14 @@ export function CreateRequestPage() {
 										Confidence: {Math.round(aiResult.confidence * 100)}%
 									</Badge>
 								</div>
-								<p className="mt-2 text-sm">{aiResult.reasoning}</p>
+								<p className="mt-2 text-sm italic">"{aiResult.reasoning}"</p>
 								{aiResult.vendorId && (
 									<p className="text-sm text-muted-foreground">
-										A vendor has been automatically assigned.
+										A craftsman has been summoned to attend to this matter.
 									</p>
 								)}
 								<p className="text-sm text-muted-foreground">
-									Redirecting to requests list...
+									Returning to the petitions chamber...
 								</p>
 							</AlertDescription>
 						</Alert>
@@ -165,10 +184,10 @@ export function CreateRequestPage() {
 
 					<form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
 						<div className="space-y-2">
-							<Label htmlFor="title">Title</Label>
+							<Label htmlFor="title">Title of Petition</Label>
 							<Input
 								id="title"
-								placeholder="Brief description of the issue"
+								placeholder="A brief description of your troubles"
 								{...register("title")}
 							/>
 							{errors.title && (
@@ -179,10 +198,10 @@ export function CreateRequestPage() {
 						</div>
 
 						<div className="space-y-2">
-							<Label htmlFor="description">Description</Label>
+							<Label htmlFor="description">Full Account of the Matter</Label>
 							<Textarea
 								id="description"
-								placeholder="Provide detailed information about the maintenance issue..."
+								placeholder="Spare no detail in describing the affliction upon your domain..."
 								rows={5}
 								{...register("description")}
 							/>
@@ -194,10 +213,10 @@ export function CreateRequestPage() {
 						</div>
 
 						<div className="space-y-2">
-							<Label htmlFor="propertyAddress">Property Address</Label>
+							<Label htmlFor="propertyAddress">Location of Property</Label>
 							<Input
 								id="propertyAddress"
-								placeholder="123 Main St, City, State 12345"
+								placeholder="123 Castle Lane, Kingdom, Realm 12345"
 								{...register("propertyAddress")}
 							/>
 							{errors.propertyAddress && (
@@ -210,14 +229,14 @@ export function CreateRequestPage() {
 						<div className="grid gap-4 sm:grid-cols-2">
 							<div className="space-y-2">
 								<Label htmlFor="category">
-									Category (optional - AI will suggest)
+									Category (optional — oracle will divine)
 								</Label>
 								<Select
 									value={selectedCategory}
 									onValueChange={(value) => setValue("category", value)}
 								>
 									<SelectTrigger>
-										<SelectValue placeholder="Let AI decide" />
+										<SelectValue placeholder="Let the oracle decide" />
 									</SelectTrigger>
 									<SelectContent>
 										{CATEGORIES.map((cat) => (
@@ -231,14 +250,14 @@ export function CreateRequestPage() {
 
 							<div className="space-y-2">
 								<Label htmlFor="priority">
-									Priority (optional - AI will suggest)
+									Urgency (optional — oracle will assess)
 								</Label>
 								<Select
 									value={selectedPriority}
 									onValueChange={(value) => setValue("priority", value)}
 								>
 									<SelectTrigger>
-										<SelectValue placeholder="Let AI decide" />
+										<SelectValue placeholder="Let the oracle decide" />
 									</SelectTrigger>
 									<SelectContent>
 										{PRIORITIES.map((pri) => (
@@ -257,10 +276,17 @@ export function CreateRequestPage() {
 								variant="outline"
 								onClick={() => navigate({ to: "/dashboard" })}
 							>
-								Cancel
+								Withdraw Petition
 							</Button>
-							<Button type="submit" disabled={isSubmitting}>
-								{isSubmitting ? "Submitting..." : "Submit Request"}
+							<Button type="submit" disabled={isSubmitting} className="gap-2">
+								{isSubmitting ? (
+									"Consulting the oracle..."
+								) : (
+									<>
+										<Sparkles className="h-4 w-4" />
+										Submit Petition
+									</>
+								)}
 							</Button>
 						</div>
 					</form>

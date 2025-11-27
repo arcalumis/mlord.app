@@ -1,3 +1,4 @@
+import { Filter, Plus, Search, Users, Wrench } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import { Badge } from "../components/ui/badge";
 import { Button } from "../components/ui/button";
@@ -164,7 +165,7 @@ export function VendorsPage() {
 	};
 
 	const handleDelete = async (id: string) => {
-		if (!confirm("Are you sure you want to delete this vendor?")) return;
+		if (!confirm("Banish this craftsman from your realm?")) return;
 
 		try {
 			await deleteVendor(id);
@@ -186,25 +187,33 @@ export function VendorsPage() {
 	return (
 		<div className="container mx-auto px-4 py-8">
 			<div className="mb-6 flex items-center justify-between">
-				<div>
-					<h1 className="text-2xl font-bold">Vendor Management</h1>
-					<p className="text-muted-foreground">
-						Manage your vendor network for maintenance requests
-					</p>
+				<div className="flex items-center gap-3">
+					<div className="rounded-full bg-primary/10 p-2">
+						<Wrench className="h-6 w-6 text-primary" />
+					</div>
+					<div>
+						<h1 className="text-2xl font-bold">Craftsmen Guild</h1>
+						<p className="text-muted-foreground">
+							Manage the artisans and tradespeople who serve your realm
+						</p>
+					</div>
 				</div>
 				<Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
 					<DialogTrigger asChild>
-						<Button onClick={() => handleOpenDialog()}>Add Vendor</Button>
+						<Button onClick={() => handleOpenDialog()} className="gap-2">
+							<Plus className="h-4 w-4" />
+							Recruit Craftsman
+						</Button>
 					</DialogTrigger>
 					<DialogContent className="max-w-md">
 						<DialogHeader>
 							<DialogTitle>
-								{editingVendor ? "Edit Vendor" : "Add New Vendor"}
+								{editingVendor ? "Update Craftsman" : "Recruit New Craftsman"}
 							</DialogTitle>
 							<DialogDescription>
 								{editingVendor
-									? "Update vendor information"
-									: "Add a new vendor to your network"}
+									? "Update the details of this artisan"
+									: "Add a new tradesperson to your guild"}
 							</DialogDescription>
 						</DialogHeader>
 						<form onSubmit={handleSubmit} className="space-y-4">
@@ -221,7 +230,7 @@ export function VendorsPage() {
 							</div>
 
 							<div className="space-y-2">
-								<Label htmlFor="category">Category *</Label>
+								<Label htmlFor="category">Trade *</Label>
 								<Select
 									value={formData.category}
 									onValueChange={(value) =>
@@ -245,7 +254,7 @@ export function VendorsPage() {
 							</div>
 
 							<div className="space-y-2">
-								<Label htmlFor="phone">Phone *</Label>
+								<Label htmlFor="phone">Messenger Raven (Phone) *</Label>
 								<Input
 									id="phone"
 									value={formData.phone}
@@ -257,7 +266,7 @@ export function VendorsPage() {
 							</div>
 
 							<div className="space-y-2">
-								<Label htmlFor="email">Email</Label>
+								<Label htmlFor="email">Electronic Scroll (Email)</Label>
 								<Input
 									id="email"
 									type="email"
@@ -280,7 +289,7 @@ export function VendorsPage() {
 							</div>
 
 							<div className="space-y-2">
-								<Label htmlFor="rating">Rating (0-5)</Label>
+								<Label htmlFor="rating">Reputation (0-5)</Label>
 								<Input
 									id="rating"
 									type="number"
@@ -314,7 +323,7 @@ export function VendorsPage() {
 									Cancel
 								</Button>
 								<Button type="submit" disabled={isSubmitting}>
-									{isSubmitting ? "Saving..." : "Save"}
+									{isSubmitting ? "Enrolling..." : "Enroll in Guild"}
 								</Button>
 							</div>
 						</form>
@@ -323,18 +332,26 @@ export function VendorsPage() {
 			</div>
 
 			<Card className="mb-6">
-				<CardHeader>
-					<CardTitle>Filters</CardTitle>
-					<CardDescription>Search and filter vendors</CardDescription>
+				<CardHeader className="pb-3">
+					<div className="flex items-center gap-2">
+						<Filter className="h-4 w-4 text-muted-foreground" />
+						<CardTitle className="text-base">Filters</CardTitle>
+					</div>
+					<CardDescription>
+						Search through your guild of craftsmen
+					</CardDescription>
 				</CardHeader>
 				<CardContent>
 					<div className="flex gap-4">
-						<Input
-							placeholder="Search vendors..."
-							value={searchQuery}
-							onChange={(e) => setSearchQuery(e.target.value)}
-							className="max-w-xs"
-						/>
+						<div className="relative flex-1 max-w-xs">
+							<Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+							<Input
+								placeholder="Search craftsmen..."
+								value={searchQuery}
+								onChange={(e) => setSearchQuery(e.target.value)}
+								className="pl-9"
+							/>
+						</div>
 						<Select
 							value={categoryFilter}
 							onValueChange={(value) =>
@@ -342,10 +359,10 @@ export function VendorsPage() {
 							}
 						>
 							<SelectTrigger className="w-[180px]">
-								<SelectValue placeholder="All Categories" />
+								<SelectValue placeholder="All Trades" />
 							</SelectTrigger>
 							<SelectContent>
-								<SelectItem value="all">All Categories</SelectItem>
+								<SelectItem value="all">All Trades</SelectItem>
 								{CATEGORIES.map((cat) => (
 									<SelectItem key={cat} value={cat}>
 										{cat.replace(/_/g, " ")}
@@ -368,18 +385,29 @@ export function VendorsPage() {
 					) : error ? (
 						<div className="p-6 text-center text-destructive">{error}</div>
 					) : vendors.length === 0 ? (
-						<div className="p-6 text-center text-muted-foreground">
-							No vendors found. Add one to get started.
+						<div className="p-12 text-center">
+							<Users className="h-12 w-12 mx-auto text-muted-foreground/50 mb-4" />
+							<p className="text-muted-foreground mb-4">
+								No craftsmen have joined your guild yet.
+							</p>
+							<Button
+								variant="outline"
+								className="gap-2"
+								onClick={() => handleOpenDialog()}
+							>
+								<Plus className="h-4 w-4" />
+								Recruit Your First Craftsman
+							</Button>
 						</div>
 					) : (
 						<Table>
 							<TableHeader>
 								<TableRow>
 									<TableHead>Name</TableHead>
-									<TableHead>Category</TableHead>
-									<TableHead>Phone</TableHead>
+									<TableHead>Trade</TableHead>
+									<TableHead>Contact</TableHead>
 									<TableHead>Email</TableHead>
-									<TableHead>Rating</TableHead>
+									<TableHead>Reputation</TableHead>
 									<TableHead>Status</TableHead>
 									<TableHead>Actions</TableHead>
 								</TableRow>
@@ -415,7 +443,7 @@ export function VendorsPage() {
 													variant="ghost"
 													onClick={() => handleToggleActive(vendor)}
 												>
-													{vendor.isActive ? "Deactivate" : "Activate"}
+													{vendor.isActive ? "Suspend" : "Reinstate"}
 												</Button>
 												<Button
 													size="sm"
@@ -423,7 +451,7 @@ export function VendorsPage() {
 													className="text-destructive"
 													onClick={() => handleDelete(vendor.id)}
 												>
-													Delete
+													Banish
 												</Button>
 											</div>
 										</TableCell>
