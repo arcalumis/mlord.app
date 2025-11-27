@@ -1,5 +1,4 @@
 import type { User } from "@prisma/client";
-import prisma from "../config/prisma";
 import { signToken } from "../utils/jwt";
 
 interface LoginCredentials {
@@ -45,8 +44,6 @@ export async function login(
 		email === DEMO_CREDENTIALS.email &&
 		password === DEMO_CREDENTIALS.password
 	) {
-		// In production, we'd fetch the user from the database
-		// and compare hashed passwords
 		const user = DEMO_CREDENTIALS.user;
 		const token = signToken(user as User);
 
@@ -56,30 +53,9 @@ export async function login(
 		};
 	}
 
-	// Try to find user in database (for future real authentication)
-	const user = await prisma.user.findUnique({
-		where: { email },
-	});
-
-	if (!user) {
-		throw new Error("Invalid credentials");
-	}
-
-	// Note: In a real implementation, you'd have a password field on the User model
-	// and compare it here using bcrypt.compare()
-	// For now, this is just a placeholder for future implementation
-
-	const token = signToken(user);
-
-	return {
-		user: {
-			id: user.id,
-			email: user.email,
-			name: user.name,
-			role: user.role,
-		},
-		token,
-	};
+	// For now, only demo credentials are supported
+	// Database authentication will be added when DATABASE_URL is configured
+	throw new Error("Invalid credentials");
 }
 
 /**
@@ -91,9 +67,8 @@ export async function getUserById(userId: string): Promise<User | null> {
 		return DEMO_CREDENTIALS.user as User;
 	}
 
-	return prisma.user.findUnique({
-		where: { id: userId },
-	});
+	// Database lookup will be added when DATABASE_URL is configured
+	return null;
 }
 
 /**
