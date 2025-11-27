@@ -15,12 +15,13 @@ datasource db {
 
 // User Management
 model User {
-  id        String   @id @default(cuid())
-  email     String   @unique
-  name      String?
-  role      UserRole @default(ADMIN)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id           String   @id @default(cuid())
+  email        String   @unique
+  passwordHash String   @map("password_hash")
+  name         String?
+  role         UserRole @default(ADMIN)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 
   maintenanceRequests MaintenanceRequest[]
   financialRecords    FinancialRecord[]
