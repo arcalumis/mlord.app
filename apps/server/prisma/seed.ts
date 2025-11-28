@@ -62,7 +62,7 @@ async function main() {
 	for (const vendor of vendors) {
 		const created = await prisma.vendor.upsert({
 			where: {
-				id: `seed-${vendor.name.toLowerCase().replace(/\s+/g, "-")}`
+				id: `seed-${vendor.name.toLowerCase().replace(/\s+/g, "-")}`,
 			},
 			update: vendor,
 			create: {
