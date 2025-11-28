@@ -23,7 +23,10 @@ export class ApiError extends Error {
 /**
  * Generic fetch wrapper with error handling
  */
-async function fetchApi<T>(endpoint: string, options?: RequestInit): Promise<T> {
+async function fetchApi<T>(
+	endpoint: string,
+	options?: RequestInit,
+): Promise<T> {
 	const url = apiUrl(endpoint);
 
 	try {
