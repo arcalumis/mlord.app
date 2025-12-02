@@ -22,6 +22,10 @@ export const APP_VERSION = "1.0.0";
 
 const app = express();
 
+// Trust proxy - Required for AWS ALB/ELB to get real client IP
+// This allows rate limiting and logging to use X-Forwarded-For header
+app.set("trust proxy", 1);
+
 // Security middleware
 app.use(helmet());
 
